@@ -1,6 +1,7 @@
--- 系统启动时创建ALC权限控制的基础表
-create table IF NOT EXISTS system_message (id integer not null, content varchar(255), primary key (id));
+-- 创建message数据表，用于验证acl
+create table IF NOT EXISTS message (id integer not null, content varchar(255), primary key (id));
 
+--
 CREATE TABLE IF NOT EXISTS acl_sid (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   principal tinyint(1) NOT NULL,
