@@ -1,9 +1,9 @@
 package club.codedemo.springsecurityacl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.ehcache.EhCacheFactoryBean;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
@@ -20,18 +20,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.sql.DataSource;
 
 @Configuration
+@EnableCaching
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
-    /**
-     * 自定义 方法验证表达式
-     */
-    MethodSecurityExpressionHandler methodSecurityExpressionHandler;
 
     final
     DataSource dataSource;
 
-    public AclMethodSecurityConfiguration(DataSource dataSource) {
+    final
+    CacheManager cacheManager;
+
+    public AclMethodSecurityConfiguration(DataSource dataSource, CacheManager cacheManager) {
         this.dataSource = dataSource;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -42,11 +43,6 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
      */
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
-        return this.methodSecurityExpressionHandler;
-    }
-
-//    @Bean
-    public MethodSecurityExpressionHandler methodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler
                 = new DefaultMethodSecurityExpressionHandler();
         AclPermissionEvaluator permissionEvaluator
@@ -55,20 +51,6 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
         return expressionHandler;
     }
 
-//    @Bean
-    public EhCacheManagerFactoryBean aclCacheManager() {
-        return new EhCacheManagerFactoryBean();
-    }
-
-//    @Bean
-    public EhCacheFactoryBean aclEhCacheFactoryBean() {
-        EhCacheFactoryBean ehCacheFactoryBean = new EhCacheFactoryBean();
-        ehCacheFactoryBean.setCacheManager(this.aclCacheManager().getObject());
-        ehCacheFactoryBean.setCacheName("aclCache");
-        return ehCacheFactoryBean;
-    }
-
-//    @Bean
     public PermissionGrantingStrategy permissionGrantingStrategy() {
         return new DefaultPermissionGrantingStrategy(new ConsoleAuditLogger());
     }
@@ -78,22 +60,19 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
      *
      * @return
      */
-//    @Bean
     public AclAuthorizationStrategy aclAuthorizationStrategy() {
         return new AclAuthorizationStrategyImpl(
                 new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
-//    @Bean
-    public EhCacheBasedAclCache aclCache() {
-        return new EhCacheBasedAclCache(
-                this.aclEhCacheFactoryBean().getObject(),
+    public SpringCacheBasedAclCache aclCache() {
+        return new SpringCacheBasedAclCache(
+                this.cacheManager.getCache("acl"),
                 this.permissionGrantingStrategy(),
                 this.aclAuthorizationStrategy()
         );
     }
 
-//    @Bean
     public LookupStrategy lookupStrategy() {
         return new BasicLookupStrategy(
                 dataSource,
@@ -103,12 +82,10 @@ public class AclMethodSecurityConfiguration extends GlobalMethodSecurityConfigur
         );
     }
 
-//    @Bean
     public JdbcMutableAclService aclService() {
         return new JdbcMutableAclService(
                 dataSource, this.lookupStrategy(), this.aclCache()
         );
     }
-
 
 }

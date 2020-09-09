@@ -1,5 +1,5 @@
 -- 创建message数据表，用于验证acl
-create table IF NOT EXISTS message (id integer not null, content varchar(255), primary key (id));
+create table IF NOT EXISTS message (id bigint(20) not null, content varchar(255), primary key (id));
 
 --
 CREATE TABLE IF NOT EXISTS acl_sid (

@@ -21,17 +21,18 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-//    @PostFilter("hasPermission(filterObject, 'READ')")
+    @PostFilter("hasPermission(filterObject, 'READ')")
     List<Message> findAll() {
-        return this.messageRepository.findAll();
+        List<Message> messages = this.messageRepository.findAll();
+        return messages;
     }
 
-//    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasPermission(returnObject, 'READ')")
     Message findById(Long id) {
-        return this.messageRepository.findById(id).get();
+        return this.messageRepository.findById(id).orElse(null);
     }
 
-//    @PreAuthorize("hasPermission(#message, 'WRITE')")
+    @PreAuthorize("hasPermission(#message, 'WRITE')")
     Message save(@Param("message") Message message) {
         return this.messageRepository.save(message);
     }
