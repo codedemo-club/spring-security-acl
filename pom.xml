@@ -29,23 +29,36 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!--spring security acl-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-acl</artifactId>
-        </dependency>
+<!--spring security acl-->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-acl</artifactId>
+</dependency>
 
-        <!--		spring security config-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
+<!--		spring security config-->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+</dependency>
 
-        <!--Spring上下文支持-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
+<!--        spring 缓存-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+<!--       spring 缓存实现:ehcache-->
+<dependency>
+    <groupId>org.ehcache</groupId>
+    <artifactId>ehcache</artifactId>
+    <version>3.8.1</version>
+</dependency>
+
+<!--ehcache则需要Spring上下文支持-->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+</dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,17 +68,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.8.1</version>
         </dependency>
 
         <dependency>

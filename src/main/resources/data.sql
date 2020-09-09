@@ -4,11 +4,11 @@ INSERT INTO message(id, content) VALUES
 (2, '第二条给李四消息'),
 (3, '第三条给王五的消息');
 
--- 建立两个用户zhangsan, lisi，一个角色ROLE_EDITOR
+-- 建立两个用户zhangsan, lisi，一个角色ROLE_ADMIN
 INSERT INTO acl_sid (id, principal, sid) VALUES
   (1, 1, 'zhangsan'),
   (2, 1, 'lisi'),
-  (3, 0, 'ROLE_EDITOR');
+  (3, 0, 'ROLE_ADMIN');
 
 -- 建立实体类映射
 INSERT INTO acl_class (id, class) VALUES
@@ -44,11 +44,6 @@ VALUES
 -- 3号ROLE_EDITOR角色对消息2拥有read读权限
 (5, 2, 2, 3, 1, 1, 1, 1),
 
--- 3号ROLE_EDITOR角色对消息3拥有read读权限
+-- 3号ROLE_EDITOR角色对消息3拥有read+write读写权限
 (6, 3, 1, 3, 1, 1, 1, 1),
-
--- 3号ROLE_EDITOR角色对消息3拥有write写权限
 (7, 3, 2, 3, 2, 1, 1, 1);
-
-
-

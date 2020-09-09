@@ -33,10 +33,10 @@ class MessageServiceTest {
     }
 
     /**
-     * 角色EDITOR获取全部的消息
+     * 角色ADMIN获取全部的消息
      */
     @Test
-    @WithMockUser(roles = "EDITOR")
+    @WithMockUser(roles = "ADMIN")
     void findAllByRole() {
         List<Message> messages = this.messageService.findAll();
         assertNotNull(messages);
@@ -56,10 +56,10 @@ class MessageServiceTest {
     }
 
     /**
-     * EDITOR能获取所有的消息
+     * ADMIN能获取所有的消息
      */
     @Test
-    @WithMockUser(roles = "EDITOR")
+    @WithMockUser(roles = "ADMIN")
     void findByIdByRole() {
         assertNotNull(this.messageService.findById(1L));
         assertNotNull(this.messageService.findById(2L));
@@ -84,6 +84,17 @@ class MessageServiceTest {
     @WithMockUser(username = "zhangsan")
     void saveWithUser() {
         Message message = this.messageService.findById(1L);
+        message.setContent(RandomString.make());
+        this.messageService.save(message);
+    }
+
+    /**
+     * 张三拥有1号消息的读写权限
+     */
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void saveWithRole() {
+        Message message = this.messageService.findById(3L);
         message.setContent(RandomString.make());
         this.messageService.save(message);
     }
