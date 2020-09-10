@@ -89,7 +89,7 @@ class MessageServiceTest {
     }
 
     /**
-     * 张三拥有1号消息的读写权限
+     * 管理员拥有1号消息的读写权限
      */
     @Test
     @WithMockUser(roles = "ADMIN")
